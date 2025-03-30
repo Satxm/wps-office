@@ -48,8 +48,7 @@ sed -i '/^set +e /,$d' wps-365/DEBIAN/{postinst,postrm,preinst,prerm}
 
 sed -i -e "s/'wps-office-uninstall.desktop' //g" -e "s/'wps-office-officeassistant.desktop' //g" wps-365/DEBIAN/prerm
 
-#sed -i '/^Recommends: ttf-mscorefonts-installer/d' wps-365/DEBIAN/control
-sed -i 's/Recommends: ttf-mscorefonts-installer/Recommends: wps-office-fonts/' wps-365/DEBIAN/control
+sed -i '/^Recommends: ttf-mscorefonts-installer/d' wps-365/DEBIAN/control
 
 size=$(du -ks wps-365 --exclude=DEBIAN | cut -f1)
 sed -ri "s/^Installed-Size.*$/Installed-Size: $size/g" wps-365/DEBIAN/control
