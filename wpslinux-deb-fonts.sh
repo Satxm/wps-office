@@ -25,7 +25,6 @@ unzip -q -o wps-fonts.zip "usr/*" -d wps-365
 rm -rf wps-365/opt/*xiezuo*
 rm -rf wps-365/usr/*xiezuo*
 rm -rf wps-365/usr/share/doc/*xiezuo*
-rm -rf wps-365/usr/share/fonts
 rm -rf wps-365/usr/share/applications/{wps-office-officeassistant.desktop,wps-office-uninstall.desktop,xiezuo.desktop}
 rm -rf wps-365/usr/bin/{wps_uninstall.sh,wps_xterm}
 rm -rf wps-365/usr/share/desktop-directories
