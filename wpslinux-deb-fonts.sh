@@ -1,4 +1,7 @@
 # /bin/bash
+
+unzip -h > /dev/null || apt install unzip
+
 rm -rf wps-*
 rm -rf build
 
@@ -15,6 +18,8 @@ mkdir build
 
 dpkg -x wps-office_12.8.2.20327.AK.preload.sw_amd64.deb wps-365/
 dpkg -e wps-office_12.8.2.20327.AK.preload.sw_amd64.deb wps-365/DEBIAN
+
+unzip -q wps-fonts.zip "usr/*" -d wps-365
 
 # remove file
 rm -rf wps-365/opt/*xiezuo*

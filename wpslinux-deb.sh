@@ -1,4 +1,7 @@
 # /bin/bash
+
+unzip -h > /dev/null || apt install unzip
+
 rm -rf wps-*
 rm -rf build
 
