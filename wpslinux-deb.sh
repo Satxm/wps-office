@@ -2,8 +2,7 @@
 
 unzip -h > /dev/null || apt install unzip
 
-rm -rf wps-*
-rm -rf build
+rm -rf wps-* build
 
 hwclock -s
 timedatectl set-ntp false
@@ -20,13 +19,16 @@ dpkg -x wps-office_12.8.2.20327.AK.preload.sw_amd64.deb wps-365/
 dpkg -e wps-office_12.8.2.20327.AK.preload.sw_amd64.deb wps-365/DEBIAN
 
 # remove file
-rm -rf wps-365/opt/*xiezuo*
-rm -rf wps-365/usr/*xiezuo*
-rm -rf wps-365/usr/share/doc/*xiezuo*
-rm -rf wps-365/usr/share/fonts
-rm -rf wps-365/usr/share/applications/{wps-office-officeassistant.desktop,wps-office-uninstall.desktop,xiezuo.desktop}
-rm -rf wps-365/usr/bin/{wps_uninstall.sh,wps_xterm}
-rm -rf wps-365/opt/kingsoft/wps-office/templates/*
+rm -rf wps-365/opt/*xiezuo* \
+ wps-365/usr/*xiezuo* \
+ wps-365/usr/share/doc/*xiezuo* \
+ wps-365/usr/share/applications/wps-office-officeassistant.desktop \
+ wps-365/usr/share/applications/wps-office-uninstall.desktop \
+ wps-365/usr/share/applications/xiezuo.desktop \
+ wps-365/usr/bin/wps_uninstall.sh \
+ wps-365/usr/bin/wps_xterm \
+ wps-365/opt/kingsoft/wps-office/templates/* \
+ wps-365/usr/share/fonts
 
 # fix template path
 sed -i 's|URL=.*|URL=/opt/kingsoft/wps-office/office6/mui/zh_CN/templates/newfile.docx|' \
@@ -49,7 +51,7 @@ sed -i 's|金山办公|WPS Office|' \
  wps-365/etc/xdg/menus/applications-merged/wps-office.menu \
  wps-365/usr/share/desktop-directories/wps-office.directory
 
-sed -i 's|wps-office-kingsoft|wps-office-kingsoft|' /usr/share/desktop-directories/wps-office.directory
+sed -i 's|wps-office-kingsoft|wps-office2023-kprometheus|' wps-365/usr/share/desktop-directories/wps-office.directory
 
 # fix menu category
 sed -i 's|Categories=.*|&Office;|' wps-365/usr/share/applications/*.desktop
