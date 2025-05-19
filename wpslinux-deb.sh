@@ -2,7 +2,7 @@
 
 unzip -h > /dev/null || apt install unzip
 
-rm -rf wps-* build
+rm -rf wps-* 
 
 hwclock -s
 timedatectl set-ntp false
@@ -13,7 +13,6 @@ wget -q https://github.com/Satxm/wps-office/releases/download/wps-license/wps-li
 date -s "$(stat -c %y wps-office_12.8.2.20327.AK.preload.sw_amd64.deb | awk -F. '{print $1}')"
 mkdir wps-365
 mkdir wps-365/DEBIAN
-mkdir build
 
 dpkg -x wps-office_12.8.2.20327.AK.preload.sw_amd64.deb wps-365/
 dpkg -e wps-office_12.8.2.20327.AK.preload.sw_amd64.deb wps-365/DEBIAN
@@ -28,6 +27,8 @@ rm -rf wps-365/opt/*xiezuo* \
  wps-365/usr/bin/wps_uninstall.sh \
  wps-365/usr/bin/wps_xterm \
  wps-365/opt/kingsoft/wps-office/templates/* \
+ wps-365/etc/xdg/menus/applications-merged/wps-office.menu \
+ wps-365/usr/share/desktop-directories/wps-office.directory \
  wps-365/usr/share/fonts
 
 # fix template path
@@ -47,14 +48,12 @@ cp -f wps-365/opt/kingsoft/wps-office/office6/mui/zh_CN/templates/newfile.docx w
 cp -f wps-365/opt/kingsoft/wps-office/office6/mui/zh_CN/templates/newfile.xlsx wps-365/opt/kingsoft/wps-office/templates/WPS表格工作表.xlsx
 cp -f wps-365/opt/kingsoft/wps-office/office6/mui/zh_CN/templates/newfile.pptx wps-365/opt/kingsoft/wps-office/templates/WPS演示文稿.pptx
 
-sed -i 's|金山办公|WPS Office|' \
- wps-365/etc/xdg/menus/applications-merged/wps-office.menu \
- wps-365/usr/share/desktop-directories/wps-office.directory
-
-sed -i 's|wps-office-kingsoft|wps-office2023-kprometheus|' wps-365/usr/share/desktop-directories/wps-office.directory
-
 # fix menu category
 sed -i 's|Categories=.*|&Office;|' wps-365/usr/share/applications/*.desktop
+# sed -i 's|金山办公|WPS Office|' \
+#  wps-365/etc/xdg/menus/applications-merged/wps-office.menu \
+#  wps-365/usr/share/desktop-directories/wps-office.directory
+# sed -i 's|wps-office-kingsoft|wps-office2023-kprometheus|' wps-365/usr/share/desktop-directories/wps-office.directory
 
 # fix background process
 sed -i '2i [[ $(ps -ef | grep -c "office6/$(basename $0)") == 1 ]] && export gOptExt=-multiply' \
@@ -75,24 +74,25 @@ sed -i '/^set +e /,$d' wps-365/DEBIAN/postinst \
 sed -i -e "s/'wps-office-uninstall.desktop' //g" -e "s/'wps-office-officeassistant.desktop' //g" wps-365/DEBIAN/prerm
 
 sed -i 's/ttf-mscorefonts-installer/wps-office-fonts/' wps-365/DEBIAN/control
+sed -i '/^Version/s/$/.nofonts/' wps-365/DEBIAN/control
 
 size=$(du -ks wps-365 --exclude=DEBIAN | cut -f1)
 sed -ri "s/^Installed-Size.*$/Installed-Size: $size/g" wps-365/DEBIAN/control
 
-dpkg-deb -b wps-365/ build/
+dpkg-deb -b wps-365/ .
 
 mkdir wps-license
 unzip -q wps-license.zip -d wps-license
 size=$(du -ks wps-license --exclude=DEBIAN | cut -f1)
 sed -ri "s/^Installed-Size.*$/Installed-Size: $size/g" wps-license/DEBIAN/control
-dpkg-deb -b wps-license/ build/
+dpkg-deb -b wps-license/ .
 
 mkdir wps-fonts
 unzip -q wps-fonts.zip -d wps-fonts
 size=$(du -ks wps-fonts --exclude=DEBIAN | cut -f1)
 sed -ri "s/^Installed-Size.*$/Installed-Size: $size/g" wps-fonts/DEBIAN/control
-dpkg-deb -b wps-fonts/ build/
+dpkg-deb -b wps-fonts/ .
 
 timedatectl set-ntp true
 hwclock -s
-rm -rf wps-*
+
