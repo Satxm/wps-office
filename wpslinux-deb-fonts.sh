@@ -7,7 +7,7 @@ rm -rf wps-* build
 hwclock -s
 timedatectl set-ntp false
 wget -q --referer="https://365.wps.cn" https://wps-linux-365.wpscdn.cn/wps/download/ep/Linux365/20327/wps-office_12.8.2.20327.AK.preload.sw_amd64.deb
-curl -L -O -e "https://365.wps.cn" "https://wps-linux-365.wpscdn.cn/wps/download/ep/Linux365/20327/wps-office_12.8.2.20327.AK.preload.sw_amd64.deb"
+# curl -sS -R -O -e "https://365.wps.cn" "https://wps-linux-365.wpscdn.cn/wps/download/ep/Linux365/20327/wps-office_12.8.2.20327.AK.preload.sw_amd64.deb"
 wget -q https://github.com/Satxm/wps-office/releases/download/wps-fonts/wps-fonts.zip
 wget -q https://github.com/Satxm/wps-office/releases/download/wps-license/wps-license.zip
 
@@ -53,8 +53,8 @@ cp -f wps-365/opt/kingsoft/wps-office/office6/mui/zh_CN/templates/newfile.pptx w
 # fix menu category
 sed -i 's|Categories=.*|&Office;|' wps-365/usr/share/applications/*.desktop
 # sed -i 's|金山办公|WPS Office|' \
-#  wps-365/etc/xdg/menus/applications-merged/wps-office.menu \
-#  wps-365/usr/share/desktop-directories/wps-office.directory
+# wps-365/etc/xdg/menus/applications-merged/wps-office.menu \
+# wps-365/usr/share/desktop-directories/wps-office.directory
 # sed -i 's|wps-office-kingsoft|wps-office2023-kprometheus|' wps-365/usr/share/desktop-directories/wps-office.directory
 
 # fix background process
