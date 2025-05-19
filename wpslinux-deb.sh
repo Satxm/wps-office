@@ -2,17 +2,19 @@
 
 unzip -h > /dev/null || apt install unzip
 
-rm -rf wps-* 
+rm -rf wps-* build
 
 hwclock -s
 timedatectl set-ntp false
-wget -q https://wps-linux-365.wpscdn.cn/wps/download/ep/Linux365/20327/wps-office_12.8.2.20327.AK.preload.sw_amd64.deb
+wget -q --referer="https://365.wps.cn" https://wps-linux-365.wpscdn.cn/wps/download/ep/Linux365/20327/wps-office_12.8.2.20327.AK.preload.sw_amd64.deb
+curl -L -O -e "https://365.wps.cn" "https://wps-linux-365.wpscdn.cn/wps/download/ep/Linux365/20327/wps-office_12.8.2.20327.AK.preload.sw_amd64.deb"
 wget -q https://github.com/Satxm/wps-office/releases/download/wps-fonts/wps-fonts.zip
 wget -q https://github.com/Satxm/wps-office/releases/download/wps-license/wps-license.zip
 
 date -s "$(stat -c %y wps-office_12.8.2.20327.AK.preload.sw_amd64.deb | awk -F. '{print $1}')"
 mkdir wps-365
 mkdir wps-365/DEBIAN
+mkdir build
 
 dpkg -x wps-office_12.8.2.20327.AK.preload.sw_amd64.deb wps-365/
 dpkg -e wps-office_12.8.2.20327.AK.preload.sw_amd64.deb wps-365/DEBIAN
@@ -79,19 +81,19 @@ sed -i '/^Version/s/$/.nofonts/' wps-365/DEBIAN/control
 size=$(du -ks wps-365 --exclude=DEBIAN | cut -f1)
 sed -ri "s/^Installed-Size.*$/Installed-Size: $size/g" wps-365/DEBIAN/control
 
-dpkg-deb -b wps-365/ .
+dpkg-deb -b wps-365/ build/
 
 mkdir wps-license
 unzip -q wps-license.zip -d wps-license
 size=$(du -ks wps-license --exclude=DEBIAN | cut -f1)
 sed -ri "s/^Installed-Size.*$/Installed-Size: $size/g" wps-license/DEBIAN/control
-dpkg-deb -b wps-license/ .
+dpkg-deb -b wps-license/ build/
 
 mkdir wps-fonts
 unzip -q wps-fonts.zip -d wps-fonts
 size=$(du -ks wps-fonts --exclude=DEBIAN | cut -f1)
 sed -ri "s/^Installed-Size.*$/Installed-Size: $size/g" wps-fonts/DEBIAN/control
-dpkg-deb -b wps-fonts/ .
+dpkg-deb -b wps-fonts/ build/
 
 timedatectl set-ntp true
 hwclock -s
