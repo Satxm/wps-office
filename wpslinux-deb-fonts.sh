@@ -7,7 +7,7 @@ rm -rf wps-* build
 hwclock -s
 
 download_json=$(curl 'https://plus.wps.cn/ops/opsd/api/v2/policy' --compressed -X POST -H 'Content-Type: application/json;charset=utf-8' -H 'Referer: https://365.wps.cn/' --data-raw '{"entity_param":[{"window_key":"wps365_download_pc_muti"}]}')
-arm64_url=$(echo $download_json | jq '.windows[0].data[3].value | fromjson | .[3].links[0].packageList[0].link' | sed 's/"//g')
+amd64_url=$(echo $download_json | jq '.windows[0].data[3].value | fromjson | .[3].links[1].packageList[0].link' | sed 's/"//g')
 
 curl -sS -R -e "https://365.wps.cn" -o wps-365.deb $amd64_url
 curl -sS -R -O https://ghproxy.net/https://github.com/Satxm/wps-office/releases/download/wps-fonts/wps-fonts.zip
