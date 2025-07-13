@@ -9,19 +9,19 @@ hwclock -s
 download_json=$(curl 'https://plus.wps.cn/ops/opsd/api/v2/policy' --compressed -X POST -H 'Content-Type: application/json;charset=utf-8' -H 'Referer: https://365.wps.cn/' --data-raw '{"entity_param":[{"window_key":"wps365_download_pc_muti"}]}')
 amd64_url=$(echo $download_json | jq '.windows[0].data[3].value | fromjson | .[3].links[1].packageList[0].link' | sed 's/"//g')
 
-curl -sS -R -e "https://365.wps.cn" -o wps-365.deb $amd64_url
-curl -sS -R -O https://ghproxy.net/https://github.com/Satxm/wps-office/releases/download/wps-fonts/wps-fonts.zip
-curl -sS -R -O https://ghproxy.net/https://github.com/Satxm/wps-office/releases/download/wps-license/wps-license.zip
+curl -sS -R -e "https://365.wps.cn" -o wps-365.deb "$amd64_url"
+curl -sS -R -O "https://github.com/Satxm/wps-office/releases/download/wps-fonts/wps-fonts.zip"
+curl -sS -R -O "https://github.com/Satxm/wps-office/releases/download/wps-license/wps-license.zip"
 
 timedatectl set-ntp false
 
-date -s "$(stat -c %y wps-office_12.8.2.20327.AK.preload.sw_amd64.deb | awk -F. '{print $1}')"
+date -s "$(stat -c %y wps-365.deb | awk -F. '{print $1}')"
 mkdir wps-365
 mkdir wps-365/DEBIAN
 mkdir build
 
-dpkg -x wps-office_12.8.2.20327.AK.preload.sw_amd64.deb wps-365/
-dpkg -e wps-office_12.8.2.20327.AK.preload.sw_amd64.deb wps-365/DEBIAN
+dpkg -x wps-365.deb wps-365/
+dpkg -e wps-365.deb wps-365/DEBIAN
 
 unzip -q -o wps-fonts.zip "usr/*" -d wps-365
 
